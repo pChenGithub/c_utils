@@ -30,7 +30,9 @@ int get_ip(const char *ifname, unsigned char* ip, int len, char type)
         return -1;
     }
 
-    memcpy(ifcu_req.ifr_ifrn.ifrn_name, ifname, strlen(ifname)+1);
+    memcpy(ifcu_req.ifr_ifrn.ifrn_name, ifname, IFNAMSIZ-1);
+    (ifcu_req.ifr_ifrn.ifrn_name)[IFNAMSIZ-1] = 0;
+
     if (ioctl(socketfd, SIOCGIFADDR, &ifcu_req)<0)
     {
         LOG_E("ioctl system call failed");
@@ -94,7 +96,9 @@ int get_mask(const char *ifname, unsigned char *ip, int len, char type)
         return -1;
     }
 
-    memcpy(ifcu_req.ifr_ifrn.ifrn_name, ifname, strlen(ifname)+1);
+    memcpy(ifcu_req.ifr_ifrn.ifrn_name, ifname, IFNAMSIZ-1);
+    (ifcu_req.ifr_ifrn.ifrn_name)[IFNAMSIZ-1] = 0;
+
     if (ioctl(socketfd, SIOCGIFNETMASK, &ifcu_req)<0)
     {
         LOG_E("ioctl system call failed");
